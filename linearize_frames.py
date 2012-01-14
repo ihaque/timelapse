@@ -43,7 +43,7 @@ def link_linear(sorted_files, tgtdir):
     return out_names
 
 def main(srcdir, tgtdir, exiflog):
-    srcfiles = jpegfiles(srcdir)[:100]
+    srcfiles = jpegfiles(srcdir)
     pool = Pool()
     digtimes = pool.map(getDigTime, srcfiles)
     sorted_files = [fn for time, fn in sorted(zip(digtimes, srcfiles))]
