@@ -13,7 +13,10 @@ from multiprocessing import Pool
 def getDigTime(filename):
     with open(filename,'rb') as f:
         tags = EXIF.process_file(f)
-        digitized = datetime.strptime(str(tags['EXIF DateTimeOriginal']),"%Y:%m:%d %H:%M:%S")
+        try:
+            digitized = datetime.strptime(str(tags['EXIF DateTimeOriginal']),"%Y:%m:%d %H:%M:%S")
+        except KeyError:
+            return None
     # Get frame number as first elt
     print "processed",filename
     return digitized
@@ -46,7 +49,8 @@ def main(srcdir, tgtdir, exiflog):
     srcfiles = jpegfiles(srcdir)
     pool = Pool()
     digtimes = pool.map(getDigTime, srcfiles)
-    sorted_files = [fn for time, fn in sorted(zip(digtimes, srcfiles))]
+    tagged_files =  filter(lambda xx:xx[0] is not None, zip(digtimes, srcfiles))
+    sorted_files = [fn for time, fn in sorted(tagged_files)]
     out_names = link_linear(sorted_files, tgtdir)
     with open(exiflog,"w") as logf:
         for time, name in izip(digtimes, out_names):
