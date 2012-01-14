@@ -40,7 +40,11 @@ def main(exiflog, outfn):
         for i in range(len(deltas)):
             if deltas[i] > thresh:
                 frameno = int(os.path.basename(files[i]).split(".")[1])
-                outf.write("%s,%d,%f\n"%(files[i],frameno,deltas[i]))
+                if os.path.islink(files[i]):
+                    fpath = os.path.realpath(files[i])
+                else:
+                    fpath = files[i]
+                outf.write("%s,%d,%f\n"%(fpath,frameno,deltas[i]))
     outpath = os.path.abspath(outfn)
     print "Next, edit the findcrop/findcrop.pde Processing sketch"
     print "and replace FILE NAME HERE with"
