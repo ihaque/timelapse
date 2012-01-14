@@ -1,1 +1,9 @@
-Repo for timelapse creation scritps
+Repo for timelapse creation scripts
+
+linearize_frames.py: takes three arguments. source directory containing all
+                     source images (potentially in subdirectories), target
+                     directory, and name for output log file. Finds all JPEG
+                     files in source directory, sorts by DateTimeDigitized in
+                     EXIF, symlinks to target directory in format
+                     frame.XXXX.jpg, and writes out log file with output
+                     filenames and EXIF time.
