@@ -8,6 +8,7 @@ linearize_frames.py: takes three arguments. source directory containing all
                      frame.XXXX.jpg, and writes out log file with output
                      filenames and EXIF time.
 
-find_breakpoints.py: takes one argument: EXIF log file from linearize_frames.
-                     outputs on stderr a breakpoint list file that can be fed
-                     as input to the findcrop Processing script
+find_breakpoints.py: takes two arguments: EXIF log file from linearize_frames,
+                     and an output filename. writes to the output file a list
+                     of breakpoints that can be used as input for the findcrop
+                     Processing script.

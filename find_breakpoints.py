@@ -13,7 +13,7 @@ def parse_log_line(line):
     time = datetime.strptime(strtime,"%Y:%m:%d %H:%M:%S")
     return name, time
 
-def main(exiflog):
+def main(exiflog, outfn):
     with open(exiflog,"r") as logf:
         files, times = zip(*map(parse_log_line, logf))      
 
@@ -36,10 +36,16 @@ def main(exiflog):
         
     thresh = 10*median
     print "Using threshold:",thresh
-    for i in range(len(deltas)):
-        if deltas[i] > thresh:
-            frameno = int(os.path.basename(files[i]).split(".")[1])
-            sys.stderr.write("%s,%d,%f\n"%(files[i],frameno,deltas[i]))
+    with open(outfn, "w") as outf:
+        for i in range(len(deltas)):
+            if deltas[i] > thresh:
+                frameno = int(os.path.basename(files[i]).split(".")[1])
+                outf.write("%s,%d,%f\n"%(files[i],frameno,deltas[i]))
+    outpath = os.path.abspath(outfn)
+    print "Next, edit the findcrop/findcrop.pde Processing sketch"
+    print "and replace FILE NAME HERE with"
+    print outpath
+    print "Then run the findcrop sketch to find your crop points"
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2])
